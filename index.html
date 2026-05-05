@@ -39,7 +39,6 @@
     min-height: 100vh;
   }
 
-  /* ——— HEADER ——— */
   header {
     background-color: var(--cream);
     border-bottom: 2px solid var(--taupe);
@@ -65,10 +64,8 @@
   .btn-ghost { background: transparent; border: 1.5px solid var(--taupe); color: var(--brown-mid); padding: 8px 16px; border-radius: 4px; font-family: 'Lato', sans-serif; font-size: 0.82rem; letter-spacing: 0.06em; cursor: pointer; transition: all 0.2s; }
   .btn-ghost:hover { border-color: var(--olive); color: var(--olive); }
 
-  /* ——— MAIN LAYOUT ——— */
   .app-wrapper { display: flex; min-height: calc(100vh - 68px); }
 
-  /* ——— SIDEBAR ——— */
   .sidebar { width: 220px; flex-shrink: 0; background: var(--cream); border-right: 1.5px solid var(--taupe-light); padding: 28px 0; position: sticky; top: 68px; height: calc(100vh - 68px); overflow-y: auto; }
   .sidebar-title { font-family: 'Lato', sans-serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--taupe); padding: 0 22px 12px; border-bottom: 1px solid var(--taupe-light); margin-bottom: 8px; }
   .cat-item { display: flex; align-items: center; gap: 9px; padding: 9px 22px; cursor: pointer; transition: background 0.15s; font-size: 0.88rem; color: var(--brown-mid); font-weight: 400; border-left: 3px solid transparent; }
@@ -77,7 +74,6 @@
   .cat-icon { font-size: 1rem; }
   .cat-count { margin-left: auto; background: var(--cream-darker); color: var(--taupe); font-size: 0.68rem; padding: 2px 7px; border-radius: 10px; font-weight: 700; }
 
-  /* ——— CONTENT ——— */
   .content { flex: 1; padding: 32px 36px; overflow-y: auto; }
   .content-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; }
   .content-title { font-family: 'Dancing Script', cursive; font-size: 2.4rem; color: var(--brown-dark); line-height: 1; }
@@ -87,7 +83,6 @@
   .search-bar input::placeholder { color: var(--taupe); }
   .search-icon { color: var(--taupe); font-size: 0.9rem; }
 
-  /* ——— RECIPE GRID ——— */
   .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px; }
 
   .recipe-card { background: var(--cream); border: 1px solid var(--taupe-light); border-radius: 3px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; overflow: hidden; box-shadow: 2px 3px 8px rgba(92,61,30,0.07); position: relative; }
@@ -95,7 +90,6 @@
 
   .card-tape { position: absolute; top: -6px; left: 50%; transform: translateX(-50%); width: 48px; height: 18px; background: rgba(184,168,138,0.55); border-radius: 2px; z-index: 2; }
 
-  /* Card image area — real photo or emoji placeholder */
   .card-img-wrap { width: 100%; height: 155px; overflow: hidden; position: relative; background: var(--cream-darker); display: flex; align-items: center; justify-content: center; }
   .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .card-img-emoji { font-size: 2.5rem; color: var(--taupe); }
@@ -103,22 +97,15 @@
   .card-body { padding: 16px 18px 14px; background: var(--paper-texture), var(--cream); }
   .card-cat { font-size: 0.63rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--olive); font-weight: 700; margin-bottom: 5px; }
   .card-title { font-family: 'Dancing Script', cursive; font-size: 1.35rem; color: var(--brown-dark); line-height: 1.2; margin-bottom: 6px; }
-  .card-meta { display: flex; gap: 12px; font-size: 0.75rem; color: var(--taupe); }
-  .card-meta span { display: flex; align-items: center; gap: 3px; }
-  .card-heart { position: absolute; bottom: 12px; right: 14px; font-size: 1rem; cursor: pointer; opacity: 0.4; transition: opacity 0.2s, transform 0.2s; color: var(--red-cherry); }
-  .card-heart:hover, .card-heart.active { opacity: 1; transform: scale(1.15); }
 
-  /* ——— ADD RECIPE CARD ——— */
   .add-card { background: transparent; border: 2px dashed var(--taupe-light); border-radius: 3px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 260px; cursor: pointer; transition: border-color 0.2s, background 0.2s; gap: 10px; color: var(--taupe); }
   .add-card:hover { border-color: var(--olive); background: rgba(107,124,74,0.04); color: var(--olive); }
   .add-card-icon { font-size: 2rem; }
   .add-card-text { font-family: 'Dancing Script', cursive; font-size: 1.1rem; }
 
-  /* ——— MODAL OVERLAY ——— */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(44,31,14,0.55); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
   .modal-overlay.open { display: flex; }
 
-  /* ——— RECIPE DETAIL MODAL ——— */
   .recipe-modal { background: var(--cream); border-radius: 4px; max-width: 720px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 20px 60px rgba(44,31,14,0.3); background-image: var(--paper-texture), var(--cream); }
   .notebook-holes { position: absolute; left: 0; top: 0; bottom: 0; width: 32px; background: var(--cream-darker); border-right: 1.5px solid var(--taupe-light); display: flex; flex-direction: column; gap: 0; padding-top: 40px; z-index: 1; }
   .hole { width: 14px; height: 14px; border-radius: 50%; background: var(--cream-dark); border: 1.5px solid var(--taupe); margin: 0 auto 18px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); }
@@ -130,7 +117,6 @@
 
   .recipe-modal-header { display: flex; gap: 28px; margin-bottom: 30px; align-items: flex-start; }
 
-  /* Photo in detail modal — real image or emoji */
   .recipe-modal-photo {
     flex-shrink: 0;
     width: 200px;
@@ -146,16 +132,11 @@
     content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 52px; height: 20px; background: rgba(184,168,138,0.5); border-radius: 2px; z-index: 2;
   }
   .recipe-modal-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .recipe-modal-photo .photo-emoji { position: relative; z-index: 1; }
 
   .recipe-modal-info { flex: 1; }
-  .recipe-modal-cat { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--olive); font-weight: 700; margin-bottom: 6px; }
   .recipe-modal-title { font-family: 'Dancing Script', cursive; font-size: 2.6rem; color: var(--brown-dark); line-height: 1.1; margin-bottom: 10px; }
   .underline-deco { width: 60px; height: 2px; background: var(--olive); margin-bottom: 14px; border-radius: 2px; }
-  .recipe-modal-meta { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 12px; }
-  .meta-pill { display: flex; align-items: center; gap: 5px; background: var(--cream-darker); border: 1px solid var(--taupe-light); padding: 5px 12px; border-radius: 20px; font-size: 0.78rem; color: var(--brown-mid); }
 
-  .modal-divider { border: none; border-top: 1px dashed var(--taupe-light); margin: 22px 0; }
   .modal-section-title { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--taupe); font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
   .modal-section-title::after { content: ''; flex: 1; height: 1px; background: var(--taupe-light); }
   .modal-two-col { display: grid; grid-template-columns: 1fr 1.6fr; gap: 32px; }
@@ -169,11 +150,6 @@
   .steps-list li { counter-increment: steps; display: flex; gap: 12px; margin-bottom: 14px; font-size: 0.88rem; color: var(--brown-mid); line-height: 1.55; }
   .step-num { flex-shrink: 0; width: 24px; height: 24px; background: var(--taupe-light); color: var(--brown-mid); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; margin-top: 1px; }
 
-  .tips-box { margin-top: 22px; background: var(--cream-darker); border: 1px solid var(--taupe-light); border-left: 3px solid var(--olive); padding: 14px 18px; border-radius: 3px; }
-  .tips-box-title { font-family: 'Dancing Script', cursive; font-size: 1rem; color: var(--olive); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
-  .tips-box p { font-size: 0.83rem; color: var(--brown-mid); line-height: 1.5; }
-
-  /* ——— FORM MODAL ——— */
   .form-modal { background: var(--cream); border-radius: 4px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 36px 36px 40px; position: relative; box-shadow: 0 20px 60px rgba(44,31,14,0.3); }
   .form-title { font-family: 'Dancing Script', cursive; font-size: 2rem; color: var(--brown-dark); margin-bottom: 6px; }
   .form-subtitle { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--taupe); margin-bottom: 24px; }
@@ -182,10 +158,7 @@
   .form-input, .form-select, .form-textarea { width: 100%; background: #fff; border: 1.5px solid var(--taupe-light); border-radius: 3px; padding: 9px 13px; font-family: 'Lato', sans-serif; font-size: 0.88rem; color: var(--brown-dark); outline: none; transition: border-color 0.2s; }
   .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--olive); }
   .form-textarea { min-height: 90px; resize: vertical; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-  .form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
 
-  /* ——— PHOTO UPLOAD FIELD ——— */
   .photo-upload-area { border: 2px dashed var(--taupe-light); border-radius: 4px; padding: 18px; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative; background: #fff; }
   .photo-upload-area:hover { border-color: var(--olive); background: rgba(107,124,74,0.03); }
   .photo-upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
@@ -195,34 +168,20 @@
   .photo-upload-icon { font-size: 1.8rem; margin-bottom: 6px; }
   .photo-remove-btn { position: absolute; top: 8px; right: 8px; background: rgba(44,31,14,0.6); color: #fff; border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 0.75rem; cursor: pointer; display: none; align-items: center; justify-content: center; z-index: 2; transition: background 0.2s; }
   .photo-remove-btn.visible { display: flex; }
-  .photo-remove-btn:hover { background: var(--red-cherry); }
 
   .ing-row, .step-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
-  .ing-row input { flex: 1; }
-  .step-row input { flex: 1; }
-  .step-num-badge { width: 26px; height: 26px; background: var(--taupe-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; color: var(--brown-mid); flex-shrink: 0; }
-  .remove-btn { background: none; border: none; color: var(--taupe); cursor: pointer; font-size: 1rem; transition: color 0.2s; padding: 2px 4px; }
-  .remove-btn:hover { color: var(--red-cherry); }
+  .ing-row input, .step-row input { flex: 1; }
   .add-row-btn { background: none; border: 1px dashed var(--taupe); color: var(--taupe); padding: 6px 14px; font-size: 0.78rem; cursor: pointer; border-radius: 3px; margin-top: 4px; transition: all 0.2s; font-family: 'Lato', sans-serif; }
   .add-row-btn:hover { border-color: var(--olive); color: var(--olive); }
+  .remove-btn { background: none; border: none; color: var(--taupe); cursor: pointer; font-size: 1rem; transition: color 0.2s; padding: 2px 4px; }
+  .remove-btn:hover { color: var(--red-cherry); }
 
-  /* ——— EMPTY STATE ——— */
-  .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; color: var(--taupe); }
-  .empty-icon { font-size: 3rem; margin-bottom: 12px; }
-  .empty-title { font-family: 'Dancing Script', cursive; font-size: 1.6rem; color: var(--brown-light); margin-bottom: 6px; }
-  .empty-sub { font-size: 0.85rem; max-width: 260px; line-height: 1.5; }
-
-  /* ——— TOAST ——— */
-  .toast { position: fixed; bottom: 28px; right: 28px; background: var(--brown-dark); color: var(--cream); padding: 12px 20px; border-radius: 4px; font-size: 0.85rem; z-index: 999; transform: translateY(80px); opacity: 0; transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
-  .toast.show { transform: translateY(0); opacity: 1; }
-
-  .deco-heart { color: var(--olive); font-size: 0.85rem; }
+  .form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
 
   @media (max-width: 700px) {
     .sidebar { display: none; }
     .modal-two-col { grid-template-columns: 1fr; }
     .recipe-modal-header { flex-direction: column; }
-    .form-row { grid-template-columns: 1fr 1fr; }
     .content { padding: 20px 16px; }
   }
 </style>
@@ -261,20 +220,23 @@
 </div>
 
 <!-- MODALS -->
-<div class="modal-overlay" id="detailOverlay" onclick="closeDetail(event)">
+<div class="modal-overlay" id="detailOverlay" onclick="closeDetailOverlay(event)">
   <div class="recipe-modal" id="detailModal">
-    <div class="notebook-holes" id="notebookHoles"></div>
+    <div class="notebook-holes">
+        <div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div>
+    </div>
     <button class="modal-close" onclick="closeDetailModal()">✕</button>
-    <button class="modal-edit-btn" onclick="editCurrentRecipe()">Editar</button>
+    <button class="modal-edit-btn" id="editBtn">Editar</button>
     <div class="modal-inner" id="detailContent"></div>
   </div>
 </div>
 
-<div class="modal-overlay" id="formOverlay" onclick="closeForm(event)">
+<div class="modal-overlay" id="formOverlay" onclick="closeFormOverlay(event)">
   <div class="form-modal" id="formModal">
     <button class="modal-close" onclick="closeFormModal()">✕</button>
     <div class="form-title" id="formTitle">Nueva Receta</div>
     <div class="form-subtitle">Completá los datos de tu receta</div>
+    
     <div class="form-group">
       <label class="form-label">📸 Foto de la receta (opcional)</label>
       <div class="photo-upload-area" id="photoUploadArea">
@@ -287,27 +249,34 @@
         </div>
       </div>
     </div>
+
     <div class="form-group"><label class="form-label">Nombre *</label><input type="text" class="form-input" id="fTitle"></div>
     <div class="form-group"><label class="form-label">Categoría *</label><select class="form-select" id="fCat"></select></div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">⏱ Prep.</label><input type="text" class="form-input" id="fPrep"></div>
-      <div class="form-group"><label class="form-label">🔥 Cocción</label><input type="text" class="form-input" id="fCook"></div>
-      <div class="form-group"><label class="form-label">🍽 Porc.</label><input type="text" class="form-input" id="fPortions"></div>
+    <div class="form-group"><label class="form-label">Emoji</label><input type="text" class="form-input" id="fEmoji" placeholder="ej: 🥗"></div>
+    
+    <div class="form-group">
+      <label class="form-label">Ingredientes *</label>
+      <div id="ingList"></div>
+      <button class="add-row-btn" onclick="addIng()">+ Agregar</button>
     </div>
-    <div class="form-group"><label class="form-label">Emoji</label><input type="text" class="form-input" id="fEmoji"></div>
-    <div class="form-group"><label class="form-label">Ingredientes *</label><div id="ingList"></div><button class="add-row-btn" onclick="addIng()">+ Agregar</button></div>
-    <div class="form-group"><label class="form-label">Pasos *</label><div id="stepList"></div><button class="add-row-btn" onclick="addStep()">+ Agregar</button></div>
-    <div class="form-group"><label class="form-label">💡 Tips</label><textarea class="form-textarea" id="fTips"></textarea></div>
-    <div class="form-actions"><button class="btn-ghost" onclick="closeFormModal()">Cancelar</button><button class="btn-primary" onclick="saveRecipe()">Guardar ♥</button></div>
+    
+    <div class="form-group">
+      <label class="form-label">Pasos *</label>
+      <div id="stepList"></div>
+      <button class="add-row-btn" onclick="addStep()">+ Agregar</button>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn-ghost" onclick="closeFormModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveRecipe()">Guardar ♥</button>
+    </div>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
-
 <script type="module">
-  // FIREBASE INITIALIZATION[cite: 1]
+  // FIREBASE INITIALIZATION
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+  import { getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCuHwlJanCHiu6xDJzOEt4a3SrgwnZNMe8",
@@ -320,9 +289,10 @@
   };
 
   const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+  const db = getFirestore(app);
+  const recipesCol = collection(db, "recipes");
 
-  // APP LOGIC
+  // APP CONSTANTS
   const CATEGORIES = [
     { id: 'todas', label: 'Todas', icon: '📖' },
     { id: 'entradas', label: 'Entradas', icon: '🥗' },
@@ -338,16 +308,18 @@
     { id: 'otros', label: 'Otros', icon: '✨' },
   ];
 
-  let recipes = JSON.parse(localStorage.getItem('cami_recipes') || 'null') || [];
-  let nextId = recipes.length ? Math.max(...recipes.map(r => r.id)) + 1 : 1;
+  let recipes = [];
   let activeCategory = 'todas';
   let editingId = null;
-  let currentDetailId = null;
-  let ingCount = 0;
-  let stepCount = 0;
   let currentPhotoData = null;
 
-  window.save = () => localStorage.setItem('cami_recipes', JSON.stringify(recipes));
+  // REAL-TIME SYNC
+  const q = query(recipesCol, orderBy("createdAt", "desc"));
+  onSnapshot(q, (snapshot) => {
+    recipes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderSidebar();
+    renderGrid();
+  });
 
   window.renderSidebar = () => {
     const el = document.getElementById('catList');
@@ -370,11 +342,12 @@
 
   window.renderGrid = () => {
     const grid = document.getElementById('recipeGrid');
-    const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
-    let list = recipes.filter(r => (activeCategory === 'todas' || r.category === activeCategory) && (!q || r.title.toLowerCase().includes(q)));
+    const searchTerm = (document.getElementById('searchInput')?.value || '').toLowerCase();
+    let list = recipes.filter(r => (activeCategory === 'todas' || r.category === activeCategory) && (!searchTerm || r.title.toLowerCase().includes(searchTerm)));
+    
     grid.innerHTML = list.map(r => {
       const cat = CATEGORIES.find(c => c.id === r.category);
-      return `<div class="recipe-card" onclick="openDetail(${r.id})">
+      return `<div class="recipe-card" onclick="openDetail('${r.id}')">
         <div class="card-tape"></div>
         <div class="card-img-wrap">${r.photo ? `<img src="${r.photo}">` : `<span class="card-img-emoji">${r.emoji || '📖'}</span>`}</div>
         <div class="card-body">
@@ -401,7 +374,7 @@
   };
 
   window.removePhoto = (e) => {
-    e.stopPropagation();
+    if(e) e.stopPropagation();
     currentPhotoData = null;
     document.getElementById('photoPreview').classList.remove('visible');
     document.getElementById('photoPlaceholder').style.display = '';
@@ -411,21 +384,32 @@
 
   window.openFormModal = (id = null) => {
     editingId = id;
-    currentPhotoData = null;
+    removePhoto();
     document.getElementById('ingList').innerHTML = '';
     document.getElementById('stepList').innerHTML = '';
-    const sel = document.getElementById('fCat');
-    sel.innerHTML = CATEGORIES.filter(c => c.id !== 'todas').map(c => `<option value="${c.id}">${c.label}</option>`).join('');
+    document.getElementById('fCat').innerHTML = CATEGORIES.filter(c => c.id !== 'todas').map(c => `<option value="${c.id}">${c.label}</option>`).join('');
     
     if (id) {
       const r = recipes.find(r => r.id === id);
       document.getElementById('fTitle').value = r.title;
       document.getElementById('fCat').value = r.category;
-      if (r.photo) { currentPhotoData = r.photo; document.getElementById('photoPreview').src = r.photo; document.getElementById('photoPreview').classList.add('visible'); document.getElementById('photoPlaceholder').style.display = 'none'; }
+      document.getElementById('fEmoji').value = r.emoji || '';
+      if (r.photo) {
+        currentPhotoData = r.photo;
+        const preview = document.getElementById('photoPreview');
+        preview.src = r.photo;
+        preview.classList.add('visible');
+        document.getElementById('photoPlaceholder').style.display = 'none';
+        document.getElementById('photoRemoveBtn').classList.add('visible');
+      }
       r.ingredients.forEach(i => addIng(i));
       r.steps.forEach(s => addStep(s));
+      document.getElementById('formTitle').textContent = "Editar Receta";
     } else {
+      document.getElementById('fTitle').value = '';
+      document.getElementById('fEmoji').value = '';
       addIng(); addStep();
+      document.getElementById('formTitle').textContent = "Nueva Receta";
     }
     document.getElementById('formOverlay').classList.add('open');
   };
@@ -433,46 +417,93 @@
   window.addIng = (val = {qty:'', name:''}) => {
     const div = document.createElement('div');
     div.className = 'ing-row';
-    div.innerHTML = `<input type="text" class="form-input" placeholder="Cant." value="${val.qty}" data-ing-qty><input type="text" class="form-input" placeholder="Nombre" value="${val.name}" data-ing-name>`;
+    div.innerHTML = `<input type="text" class="form-input" placeholder="Cant." value="${val.qty}" data-ing-qty><input type="text" class="form-input" placeholder="Nombre" value="${val.name}" data-ing-name><button class="remove-btn" onclick="this.parentElement.remove()">✕</button>`;
     document.getElementById('ingList').appendChild(div);
   };
 
   window.addStep = (val = '') => {
     const div = document.createElement('div');
     div.className = 'step-row';
-    div.innerHTML = `<input type="text" class="form-input" value="${val}" data-step>`;
+    div.innerHTML = `<input type="text" class="form-input" placeholder="Escribe el paso..." value="${val}" data-step><button class="remove-btn" onclick="this.parentElement.remove()">✕</button>`;
     document.getElementById('stepList').appendChild(div);
   };
 
-  window.saveRecipe = () => {
+  window.saveRecipe = async () => {
     const title = document.getElementById('fTitle').value;
     const cat = document.getElementById('fCat').value;
-    const ings = Array.from(document.querySelectorAll('.ing-row')).map(row => ({qty: row.querySelector('[data-ing-qty]').value, name: row.querySelector('[data-ing-name]').value}));
-    const steps = Array.from(document.querySelectorAll('[data-step]')).map(i => i.value);
+    const emoji = document.getElementById('fEmoji').value;
+    const ings = Array.from(document.querySelectorAll('.ing-row')).map(row => ({
+      qty: row.querySelector('[data-ing-qty]').value, 
+      name: row.querySelector('[data-ing-name]').value
+    })).filter(i => i.name !== '');
+
+    const steps = Array.from(document.querySelectorAll('[data-step]')).map(i => i.value).filter(s => s !== '');
     
-    const data = { id: editingId || nextId++, title, category: cat, photo: currentPhotoData, ingredients: ings, steps };
-    if (editingId) recipes[recipes.findIndex(r => r.id === editingId)] = data;
-    else recipes.unshift(data);
-    
-    save();
-    document.getElementById('formOverlay').classList.remove('open');
-    renderGrid();
-    renderSidebar();
+    if (!title || ings.length === 0 || steps.length === 0) {
+      alert("Por favor rellena el nombre, al menos un ingrediente y un paso.");
+      return;
+    }
+
+    const recipeData = { 
+      title, 
+      category: cat, 
+      emoji,
+      photo: currentPhotoData, 
+      ingredients: ings, 
+      steps,
+      createdAt: new Date()
+    };
+
+    try {
+      if (editingId) {
+        await updateDoc(doc(db, "recipes", editingId), recipeData);
+      } else {
+        await addDoc(recipesCol, recipeData);
+      }
+      closeFormModal();
+    } catch (e) {
+      console.error("Error al guardar: ", e);
+    }
   };
 
   window.openDetail = (id) => {
     const r = recipes.find(r => r.id === id);
-    currentDetailId = id;
-    document.getElementById('detailContent').innerHTML = `<h2>${r.title}</h2><div class="recipe-modal-photo">${r.photo ? `<img src="${r.photo}">` : '🍴'}</div>`;
+    const cat = CATEGORIES.find(c => c.id === r.category);
+    
+    document.getElementById('editBtn').onclick = () => { closeDetailModal(); openFormModal(id); };
+    
+    document.getElementById('detailContent').innerHTML = `
+      <div class="recipe-modal-header">
+        <div class="recipe-modal-photo">${r.photo ? `<img src="${r.photo}">` : `<span style="font-size:3rem">${r.emoji || '🍴'}</span>`}</div>
+        <div class="recipe-modal-info">
+          <div style="font-size:0.65rem; color:var(--olive); font-weight:700; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:5px;">${cat ? cat.label : ''}</div>
+          <div class="recipe-modal-title">${r.title}</div>
+          <div class="underline-deco"></div>
+        </div>
+      </div>
+      <div class="modal-two-col">
+        <div>
+          <div class="modal-section-title">Ingredientes</div>
+          <ul class="ingredients-list">${r.ingredients.map(i => `<li><span class="ing-qty">${i.qty}</span> ${i.name}</li>`).join('')}</ul>
+        </div>
+        <div>
+          <div class="modal-section-title">Pasos</div>
+          <ol class="steps-list">${r.steps.map((s, idx) => `<li><span class="step-num">${idx+1}</span> ${s}</li>`).join('')}</ol>
+        </div>
+      </div>`;
     document.getElementById('detailOverlay').classList.add('open');
   };
 
   window.closeDetailModal = () => document.getElementById('detailOverlay').classList.remove('open');
   window.closeFormModal = () => document.getElementById('formOverlay').classList.remove('open');
-  window.openSearch = () => { const s = document.getElementById('searchBarWrap'); s.style.display = s.style.display === 'none' ? 'flex' : 'none'; };
+  window.closeDetailOverlay = (e) => { if(e.target.id === 'detailOverlay') closeDetailModal(); };
+  window.closeFormOverlay = (e) => { if(e.target.id === 'formOverlay') closeFormModal(); };
+  window.openSearch = () => { 
+    const s = document.getElementById('searchBarWrap'); 
+    s.style.display = s.style.display === 'none' ? 'flex' : 'none'; 
+    if(s.style.display === 'flex') document.getElementById('searchInput').focus();
+  };
 
-  renderSidebar();
-  renderGrid();
 </script>
 </body>
 </html>
