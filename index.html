@@ -5,34 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Recetas de Cami</title>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<!-- Firebase SDK -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-
-  // ══════════════════════════════════════════════════
-  // Configuración de Firebase
-  const firebaseConfig = {
-    apiKey:            "AIzaSyCuHwlJanCHiu6xDJzOEt4a3SrgwnZNMe8",
-    authDomain:        "recetas-de-cami.firebaseapp.com",
-    projectId:         "recetas-de-cami",
-    storageBucket:     "recetas-de-cami.firebasestorage.app",
-    messagingSenderId: "85795835413",
-    appId:             "1:85795835413:web:8703e96f06eb22d4ca081c",
-    measurementId:     "G-TD4CKXG2QP"
-  };
-  // ══════════════════════════════════════════════════
-
-  const app = initializeApp(firebaseConfig);
-  const db  = getFirestore(app);
-
-  window._fbDb        = db;
-  window._fbDoc       = doc;
-  window._fbGetDoc    = getDoc;
-  window._fbSetDoc    = setDoc;
-  window._fbReady     = true;
-  window.dispatchEvent(new Event('firebase-ready'));
-</script>
 <style>
   :root {
     --cream: #f5f0e8;
@@ -286,13 +258,6 @@
 
   .deco-heart { color: var(--olive); font-size: 0.85rem; }
 
-  .sync-badge { display:flex; align-items:center; gap:5px; font-size:0.72rem; color:var(--taupe); padding:5px 10px; border-radius:20px; border:1px solid var(--taupe-light); background:var(--cream); }
-  .sync-dot { width:7px; height:7px; border-radius:50%; background:var(--taupe-light); transition:background 0.4s; flex-shrink:0; }
-  .sync-dot.ok  { background:var(--olive); }
-  .sync-dot.err { background:var(--red-cherry); }
-  .sync-dot.loading { background:#f0a500; animation:blink 0.7s infinite alternate; }
-  @keyframes blink { to { opacity:0.25; } }
-
   @media (max-width: 700px) {
     .sidebar { display: none; }
     .modal-two-col { grid-template-columns: 1fr; }
@@ -311,10 +276,6 @@
     <span class="logo-main">Recetas de Cami</span>
   </div>
   <div class="header-actions">
-    <div class="sync-badge">
-      <span class="sync-dot loading" id="syncDot"></span>
-      <span id="syncLabel">Conectando...</span>
-    </div>
     <button class="btn-ghost" onclick="openSearch()">🔍 Buscar</button>
     <button class="btn-primary" onclick="openFormModal()">+ Nueva Receta</button>
   </div>
@@ -528,62 +489,18 @@ const SAMPLE_RECIPES = [
   },
 ];
 
-let recipes = [];
-let nextId = 1;
+let recipes = JSON.parse(localStorage.getItem('cami_recipes') || 'null') || SAMPLE_RECIPES;
+let nextId = Math.max(...recipes.map(r => r.id), 0) + 1;
 let activeCategory = 'todas';
 let editingId = null;
 let currentDetailId = null;
 let ingCount = 0;
 let stepCount = 0;
+// Holds the current photo data URL while editing
 let currentPhotoData = null;
 
-// —— SYNC STATUS ——
-function setSyncStatus(state, text) {
-  const dot = document.getElementById('syncDot');
-  const lbl = document.getElementById('syncLabel');
-  if (!dot) return;
-  dot.className = 'sync-dot ' + (state || '');
-  lbl.textContent = text;
-}
-
-// —— FIREBASE SAVE / LOAD ——
-async function save() {
-  // Backup local siempre (para modo offline)
-  localStorage.setItem('cami_recipes_backup', JSON.stringify(recipes));
-  if (!window._fbReady) return;
-  try {
-    setSyncStatus('loading', 'Guardando...');
-    const ref = window._fbDoc(window._fbDb, 'recetabook', 'cami');
-    await window._fbSetDoc(ref, { recipes: JSON.stringify(recipes) });
-    setSyncStatus('ok', 'Sincronizado ✓');
-  } catch(e) {
-    setSyncStatus('err', 'Error al guardar');
-    console.error(e);
-  }
-}
-
-async function loadFromFirebase() {
-  if (!window._fbReady) { renderFallback(); return; }
-  try {
-    setSyncStatus('loading', 'Cargando...');
-    const ref  = window._fbDoc(window._fbDb, 'recetabook', 'cami');
-    const snap = await window._fbGetDoc(ref);
-    if (snap.exists() && snap.data().recipes) {
-      recipes = JSON.parse(snap.data().recipes);
-    } else {
-      recipes = SAMPLE_RECIPES;
-      await save(); // primera vez: persistir recetas de muestra
-    }
-    nextId = Math.max(...recipes.map(r => r.id), 0) + 1;
-    setSyncStatus('ok', 'Sincronizado ✓');
-  } catch(e) {
-    setSyncStatus('err', 'Sin conexión');
-    recipes = JSON.parse(localStorage.getItem('cami_recipes_backup') || 'null') || SAMPLE_RECIPES;
-    nextId = Math.max(...recipes.map(r => r.id), 0) + 1;
-    console.warn('Firebase no disponible, usando caché local.', e);
-  }
-  renderSidebar();
-  renderGrid();
+function save() {
+  localStorage.setItem('cami_recipes', JSON.stringify(recipes));
 }
 
 // —— SIDEBAR ——
@@ -918,22 +835,8 @@ function showToast(msg) {
 }
 
 // —— INIT ——
-// Esperar a que Firebase esté listo (el módulo ES puede tardar un tick)
-if (window._fbReady) {
-  loadFromFirebase();
-} else {
-  window.addEventListener('firebase-ready', loadFromFirebase, { once: true });
-  // Timeout de seguridad: si Firebase no carga en 6s, usar caché local
-  setTimeout(() => {
-    if (!window._fbReady) {
-      setSyncStatus('err', 'Sin conexión');
-      recipes = JSON.parse(localStorage.getItem('cami_recipes_backup') || 'null') || SAMPLE_RECIPES;
-      nextId = Math.max(...recipes.map(r => r.id), 0) + 1;
-      renderSidebar();
-      renderGrid();
-    }
-  }, 6000);
-}
+renderSidebar();
+renderGrid();
 </script>
 </body>
 </html>
