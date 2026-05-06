@@ -3,103 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Recetas de Cami - Admin</title>
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<title>Recetas de Cami</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --cream: #f5f0e8;
     --cream-dark: #ede5d4;
-    --brown-dark: #2c1f0e;
-    --brown-mid: #5c3d1e;
+    --brown: #2c1f0e;
     --olive: #6b7c4a;
-    --olive-light: #8a9e60;
+    --red: #c0392b;
     --taupe: #b8a88a;
-    --red-cherry: #c0392b;
-    --paper-texture: repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(139, 99, 64, 0.06) 27px, rgba(139, 99, 64, 0.06) 28px);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background-color: var(--cream-dark); background-image: var(--paper-texture); font-family: 'Lato', sans-serif; color: var(--brown-dark); min-height: 100vh; }
+  body { background: var(--cream-dark); font-family: 'Lato', sans-serif; color: var(--brown); }
 
-  header { background-color: var(--cream); border-bottom: 2px solid var(--taupe); padding: 18px 32px 14px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
-  .logo { display: flex; flex-direction: column; }
-  .logo-main { font-family: 'Dancing Script', cursive; font-size: 2.2rem; font-weight: 700; }
-  .logo-sub { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--olive); }
+  header { 
+    background: var(--cream); 
+    padding: 15px 25px; 
+    border-bottom: 2px solid var(--taupe);
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    position: sticky; top: 0; z-index: 1000;
+  }
 
-  .header-actions { display: flex; gap: 12px; align-items: center; }
-  .btn { padding: 9px 18px; border-radius: 4px; border: none; font-weight: 700; cursor: pointer; font-size: 0.8rem; text-transform: uppercase; transition: 0.2s; }
-  .btn-primary { background: var(--olive); color: white; }
-  .btn-ghost { background: transparent; border: 1.5px solid var(--taupe); color: var(--brown-mid); }
-  .btn-danger { background: var(--red-cherry); color: white; display: none; }
-
-  .app-wrapper { display: flex; min-height: calc(100vh - 75px); }
-  .sidebar { width: 220px; background: var(--cream); border-right: 1.5px solid var(--taupe); padding: 25px 0; }
-  .cat-item { padding: 10px 22px; cursor: pointer; display: flex; justify-content: space-between; font-size: 0.9rem; }
-  .cat-item.active { background: var(--cream-dark); color: var(--olive); font-weight: 700; border-left: 4px solid var(--olive); }
-
-  .content { flex: 1; padding: 30px; }
-  .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-
-  /* Cards & Selection */
-  .recipe-card { background: var(--cream); border: 1px solid var(--taupe); border-radius: 5px; position: relative; cursor: pointer; transition: 0.2s; overflow: hidden; }
-  .recipe-card:hover { transform: translateY(-3px); }
-  .recipe-card.selected { border: 3px solid var(--olive); background: #f0f4e8; }
+  .logo-main { font-family: 'Dancing Script', cursive; font-size: 1.8rem; }
   
-  .card-img { height: 140px; display: flex; align-items: center; justify-content: center; background: #eee; font-size: 3rem; }
-  .card-body { padding: 15px; }
-  .card-title { font-family: 'Dancing Script', cursive; font-size: 1.4rem; }
+  .header-actions { display: flex; gap: 8px; }
 
-  .selection-indicator { position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--taupe); background: white; display: none; }
-  .select-mode .selection-indicator { display: block; }
-  .selected .selection-indicator { background: var(--olive); border-color: var(--olive); }
+  /* BOTONES */
+  .btn { 
+    padding: 8px 14px; 
+    border-radius: 6px; 
+    border: none; 
+    font-weight: bold; 
+    cursor: pointer; 
+    font-size: 13px;
+    text-transform: uppercase;
+  }
+  .btn-new { background: var(--olive); color: white; }
+  .btn-select { background: white; border: 1px solid var(--taupe); color: var(--brown); }
+  .btn-delete { background: var(--red); color: white; display: none; } /* Inicia oculto */
 
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: var(--cream); padding: 30px; border-radius: 8px; width: 400px; }
-  input, textarea, select { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid var(--taupe); border-radius: 4px; }
+  .app-container { display: flex; min-height: 90vh; }
   
-  .toast { position: fixed; bottom: 20px; right: 20px; background: #333; color: white; padding: 12px 20px; border-radius: 4px; display: none; }
+  .sidebar { 
+    width: 200px; background: var(--cream); 
+    border-right: 1px solid var(--taupe); 
+    padding: 20px 0;
+  }
+  .cat-item { 
+    padding: 12px 20px; cursor: pointer; 
+    display: flex; justify-content: space-between;
+  }
+  .cat-item.active { background: var(--cream-dark); color: var(--olive); font-weight: bold; }
+
+  .main-content { flex: 1; padding: 20px; }
+  .grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+    gap: 15px; 
+  }
+
+  /* TARJETAS */
+  .card { 
+    background: white; border: 1px solid var(--taupe); 
+    border-radius: 8px; overflow: hidden; position: relative; 
+    cursor: pointer; transition: 0.2s;
+  }
+  .card.selected { border: 3px solid var(--olive); background: #fafff0; }
+  
+  .card-emoji { height: 100px; display: flex; align-items: center; justify-content: center; font-size: 40px; background: #f9f9f9; }
+  .card-txt { padding: 10px; font-family: 'Dancing Script', cursive; font-size: 1.2rem; text-align: center; }
+
+  /* Indicador de selección */
+  .check { 
+    position: absolute; top: 10px; right: 10px; 
+    width: 20px; height: 20px; border-radius: 50%; 
+    border: 2px solid var(--taupe); background: white;
+    display: none; 
+  }
+  .select-mode .check { display: block; }
+  .selected .check { background: var(--olive); border-color: var(--olive); }
+
+  /* MODAL */
+  .modal-bg { 
+    display: none; position: fixed; inset: 0; 
+    background: rgba(0,0,0,0.5); z-index: 2000; 
+    align-items: center; justify-content: center; 
+  }
+  .modal { background: var(--cream); padding: 25px; border-radius: 12px; width: 90%; max-width: 400px; }
+  input, select, textarea { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid var(--taupe); border-radius: 6px; }
+
 </style>
 </head>
-<body id="mainBody">
+<body id="bodyTag">
 
 <header>
-  <div class="logo">
-    <span class="logo-sub">Libro de</span>
-    <span class="logo-main">Recetas de Cami</span>
-  </div>
+  <div class="logo-main">Recetas de Cami</div>
   <div class="header-actions">
-    <button class="btn btn-ghost" id="btnMode" onclick="toggleSelectMode()">Seleccionar</button>
-    <button class="btn btn-danger" id="btnDelete" onclick="deleteSelected()">Eliminar (<span id="count">0</span>)</button>
-    <button class="btn btn-primary" id="btnAdd" onclick="openModal()">+ Nueva</button>
+    <button class="btn btn-select" id="btnSel" onclick="activarSeleccion()">Seleccionar</button>
+    <button class="btn btn-delete" id="btnDel" onclick="borrarRecetas()">Eliminar (<span id="n">0</span>)</button>
+    <button class="btn btn-new" id="btnNew" onclick="abrirModal()">+ Nueva</button>
   </div>
 </header>
 
-<div class="app-wrapper">
-  <aside class="sidebar" id="catList"></aside>
-  <main class="content">
-    <div id="recipeGrid" class="recipe-grid"></div>
+<div class="app-container">
+  <aside class="sidebar" id="listaGatos"></aside>
+  <main class="main-content">
+    <div class="grid" id="recetario"></div>
   </main>
 </div>
 
-<div class="modal-overlay" id="modal">
+<!-- Ventana para nueva receta -->
+<div class="modal-bg" id="miModal">
   <div class="modal">
-    <h3>Nueva Receta</h3><br>
-    <input type="text" id="t" placeholder="Título">
-    <select id="c"></select>
-    <input type="text" id="e" placeholder="Emoji (🍕)">
-    <textarea id="n" placeholder="Notas"></textarea>
-    <button class="btn btn-primary" onclick="save()">Guardar</button>
-    <button class="btn btn-ghost" onclick="closeModal()">Cerrar</button>
+    <h2 style="font-family:'Dancing Script'">Añadir Receta</h2><br>
+    <input type="text" id="titulo" placeholder="Nombre (ej: Chipas)">
+    <select id="categoria"></select>
+    <input type="text" id="emoji" placeholder="Emoji (ej: 🥯)">
+    <textarea id="notas" placeholder="Tips rápidos..."></textarea>
+    <button class="btn btn-new" style="width:100%" onclick="guardar()">Guardar en Firebase</button>
+    <button class="btn btn-select" style="width:100%; margin-top:10px" onclick="cerrarModal()">Cancelar</button>
   </div>
 </div>
-
-<div id="toast" class="toast"></div>
 
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
 
 <script>
+// CONFIGURACIÓN FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyD2TXeLiFDCw6hlqKcrkNTo_VCaWqXcKi4",
   authDomain: "recetas-de-cami-b74fd.firebaseapp.com",
@@ -113,91 +147,95 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-const CATS = [
+const CATEGORIAS = [
   {id:'todas', n:'Todas', i:'📖'},
   {id:'entradas', n:'Entradas', i:'🥗'},
   {id:'principales', n:'Principales', i:'🍽'},
   {id:'postres', n:'Postres', i:'🍰'}
 ];
 
-let recipes = [], activeCat = 'todas', isSelectMode = false, selected = new Set();
+let misRecetas = [], catActual = 'todas', modoSeleccion = false, seleccionadas = new Set();
 
-db.ref('recipes').on('value', s => {
-  const d = s.val();
-  recipes = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
-  render();
+// LEER DATOS
+db.ref('recipes').on('value', snapshot => {
+  const data = snapshot.val();
+  misRecetas = data ? Object.keys(data).map(key => ({...data[key], id: key})) : [];
+  dibujarTodo();
 });
 
-function toggleSelectMode() {
-  isSelectMode = !isSelectMode;
-  selected.clear();
-  document.getElementById('mainBody').classList.toggle('select-mode', isSelectMode);
-  document.getElementById('btnMode').textContent = isSelectMode ? "Cancelar" : "Seleccionar";
-  document.getElementById('btnDelete').style.display = isSelectMode ? "block" : "none";
-  document.getElementById('btnAdd').style.display = isSelectMode ? "none" : "block";
-  updateCount();
-  render();
+function activarSeleccion() {
+  modoSeleccion = !modoSeleccion;
+  seleccionadas.clear();
+  
+  // Cambiar visibilidad de botones
+  document.getElementById('btnDel').style.display = modoSeleccion ? 'block' : 'none';
+  document.getElementById('btnNew').style.display = modoSeleccion ? 'none' : 'block';
+  document.getElementById('btnSel').textContent = modoSeleccion ? 'Cancelar' : 'Seleccionar';
+  document.getElementById('bodyTag').classList.toggle('select-mode', modoSeleccion);
+  
+  actualizarContador();
+  dibujarTodo();
 }
 
-function handleCard(id) {
-  if(!isSelectMode) return;
-  selected.has(id) ? selected.delete(id) : selected.add(id);
-  updateCount();
-  render();
+function tocarReceta(id) {
+  if(!modoSeleccion) return;
+  seleccionadas.has(id) ? seleccionadas.delete(id) : seleccionadas.add(id);
+  actualizarContador();
+  dibujarTodo();
 }
 
-function updateCount() { document.getElementById('count').textContent = selected.size; }
+function actualizarContador() {
+  document.getElementById('n').textContent = seleccionadas.size;
+}
 
-function deleteSelected() {
-  if(selected.size === 0) return;
-  if(confirm(`¿Eliminar ${selected.size} recetas permanentemente?`)) {
-    selected.forEach(id => db.ref('recipes/'+id).remove());
-    toggleSelectMode();
-    showToast("Recetas eliminadas");
+function borrarRecetas() {
+  if(seleccionadas.size === 0) return;
+  if(confirm(`¿Quieres borrar estas ${seleccionadas.size} recetas?`)) {
+    seleccionadas.forEach(id => db.ref('recipes/' + id).remove());
+    activarSeleccion(); // Salir del modo borrar
   }
 }
 
-function render() {
-  const grid = document.getElementById('recipeGrid');
-  const filtered = recipes.filter(r => activeCat === 'todas' || r.category === activeCat);
+function dibujarTodo() {
+  const grid = document.getElementById('recetario');
+  const filtradas = misRecetas.filter(r => catActual === 'todas' || r.category === catActual);
   
-  grid.innerHTML = filtered.map(r => `
-    <div class="recipe-card ${selected.has(r.id) ? 'selected' : ''}" onclick="handleCard('${r.id}')">
-      <div class="selection-indicator"></div>
-      <div class="card-img">${r.emoji || '🥘'}</div>
-      <div class="card-body"><div class="card-title">${r.title}</div></div>
+  grid.innerHTML = filtradas.map(r => `
+    <div class="card ${seleccionadas.has(r.id) ? 'selected' : ''}" onclick="tocarReceta('${r.id}')">
+      <div class="check"></div>
+      <div class="card-emoji">${r.emoji || '🥘'}</div>
+      <div class="card-txt">${r.title}</div>
     </div>
   `).join('');
 
-  document.getElementById('catList').innerHTML = CATS.map(c => `
-    <div class="cat-item ${activeCat === c.id ? 'active' : ''}" onclick="activeCat='${c.id}';render()">
+  document.getElementById('listaGatos').innerHTML = CATEGORIAS.map(c => `
+    <div class="cat-item ${catActual === c.id ? 'active' : ''}" onclick="catActual='${c.id}';dibujarTodo()">
       <span>${c.i} ${c.n}</span>
-      <span>${c.id==='todas' ? recipes.length : recipes.filter(r=>r.category===c.id).length}</span>
+      <span>${c.id==='todas' ? misRecetas.length : misRecetas.filter(r=>r.category===c.id).length}</span>
     </div>
   `).join('');
 }
 
-function openModal() {
-  document.getElementById('c').innerHTML = CATS.filter(c=>c.id!=='todas').map(c=>`<option value="${c.id}">${c.n}</option>`).join('');
-  document.getElementById('modal').classList.add('open');
+// FUNCIONES MODAL
+function abrirModal() {
+  document.getElementById('categoria').innerHTML = CATEGORIAS.filter(c=>c.id!=='todas').map(c=>`<option value="${c.id}">${c.n}</option>`).join('');
+  document.getElementById('miModal').style.display = 'flex';
 }
-function closeModal() { document.getElementById('modal').classList.remove('open'); }
+function cerrarModal() { document.getElementById('miModal').style.display = 'none'; }
 
-function save() {
-  const title = document.getElementById('t').value;
-  if(!title) return;
+function guardar() {
+  const t = document.getElementById('titulo').value;
+  if(!t) return alert("Ponle nombre!");
+  
   db.ref('recipes').push({
-    title, 
-    category: document.getElementById('c').value,
-    emoji: document.getElementById('e').value,
-    notes: document.getElementById('n').value
-  }).then(() => { closeModal(); showToast("¡Guardado!"); });
-}
-
-function showToast(m) {
-  const t = document.getElementById('toast');
-  t.textContent = m; t.style.display = 'block';
-  setTimeout(() => t.style.display='none', 2000);
+    title: t,
+    category: document.getElementById('categoria').value,
+    emoji: document.getElementById('emoji').value,
+    notes: document.getElementById('notas').value
+  }).then(() => {
+    cerrarModal();
+    document.getElementById('titulo').value = "";
+  });
 }
 </script>
 </body>
