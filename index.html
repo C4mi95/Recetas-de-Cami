@@ -118,6 +118,9 @@
   .modal-close:hover { color: var(--brown-dark); }
   .modal-edit-btn { position: absolute; top: 14px; right: 52px; background: none; border: 1px solid var(--taupe-light); padding: 5px 12px; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--olive); cursor: pointer; border-radius: 3px; z-index: 5; transition: all 0.2s; }
   .modal-edit-btn:hover { background: var(--olive); color: #fff; border-color: var(--olive); }
+  /* Estilo para el botón de eliminar */
+  .modal-delete-btn { position: absolute; top: 14px; right: 110px; background: none; border: 1px solid var(--taupe-light); padding: 5px 12px; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red-cherry); cursor: pointer; border-radius: 3px; z-index: 5; transition: all 0.2s; }
+  .modal-delete-btn:hover { background: var(--red-cherry); color: #fff; border-color: var(--red-cherry); }
 
   .recipe-modal-header { display: flex; gap: 28px; margin-bottom: 30px; align-items: flex-start; }
 
@@ -291,6 +294,8 @@
   <div class="recipe-modal" id="detailModal">
     <div class="notebook-holes" id="notebookHoles"></div>
     <button class="modal-close" onclick="closeDetailModal()">✕</button>
+    <!-- Botón de Eliminar añadido -->
+    <button class="modal-delete-btn" onclick="deleteCurrentRecipe()">Eliminar</button>
     <button class="modal-edit-btn" onclick="editCurrentRecipe()">Editar</button>
     <div class="modal-inner" id="detailContent"></div>
   </div>
@@ -419,6 +424,10 @@ onValue(recipesRef, (snapshot) => {
     recipes = data;
     renderSidebar();
     renderGrid();
+  } else {
+    recipes = [];
+    renderSidebar();
+    renderGrid();
   }
 });
 
@@ -520,6 +529,17 @@ function openDetail(id) {
     ${r.tips ? `<div class="tips-box"><div class="tips-box-title">💡 Tips <span class="deco-heart">♥</span></div><p>${r.tips}</p></div>` : ''}
   `;
   document.getElementById('detailOverlay').classList.add('open');
+}
+
+// Nueva función para eliminar la receta actual
+function deleteCurrentRecipe() {
+  if (!currentDetailId) return;
+  if (confirm("¿Estás segura de que querés eliminar esta receta? No se puede deshacer. 🥺")) {
+    recipes = recipes.filter(r => r.id !== currentDetailId);
+    save();
+    closeDetailModal();
+    showToast('🗑️ Receta eliminada');
+  }
 }
 
 function saveRecipe() {
@@ -666,6 +686,7 @@ window.saveRecipe = saveRecipe;
 window.handlePhotoUpload = handlePhotoUpload;
 window.addIng = addIng;
 window.addStep = addStep;
+window.deleteCurrentRecipe = deleteCurrentRecipe; // Exportar nueva función
 window.openSearch = () => {
   const wrap = document.getElementById('searchBarWrap');
   wrap.style.display = wrap.style.display === 'none' ? 'flex' : 'none';
