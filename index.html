@@ -121,6 +121,11 @@
   .toast { position: fixed; bottom: 28px; right: 28px; background: var(--brown-dark); color: var(--cream); padding: 12px 20px; border-radius: 4px; font-size: 0.85rem; z-index: 999; transform: translateY(80px); opacity: 0; transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
   .toast.show { transform: translateY(0); opacity: 1; }
   .deco-heart { color: var(--olive); font-size: 0.85rem; }
+  
+  /* NUEVO ESTILO BOTON ELIMINAR */
+  .btn-danger { background: transparent; border: 1.5px solid var(--red-cherry); color: var(--red-cherry); padding: 9px 20px; border-radius: 4px; font-family: 'Lato', sans-serif; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-right: auto; }
+  .btn-danger:hover { background: var(--red-cherry); color: #fff; }
+
   @media (max-width: 700px) { .sidebar { display: none; } .modal-two-col { grid-template-columns: 1fr; } .recipe-modal-header { flex-direction: column; } .form-row { grid-template-columns: 1fr 1fr; } .content { padding: 20px 16px; } }
 </style>
 </head>
@@ -205,6 +210,8 @@
     <div class="form-group"><label class="form-label">Pasos *</label><div id="stepList"></div><button class="add-row-btn" onclick="addStep()">+ Agregar paso</button></div>
     <div class="form-group"><label class="form-label">💡 Tips</label><textarea class="form-textarea" id="fTips"></textarea></div>
     <div class="form-actions">
+      <!-- BOTON ELIMINAR AGREGADO AQUÍ -->
+      <button class="btn-danger" id="btnDelete" style="display:none" onclick="deleteRecipe()">Eliminar</button>
       <button class="btn-ghost" onclick="closeFormModal()">Cancelar</button>
       <button class="btn-primary" onclick="saveRecipe()">Guardar Receta ♥</button>
     </div>
@@ -216,7 +223,7 @@
 <!-- LÓGICA FIREBASE -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getDatabase, ref, push, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  import { getDatabase, ref, push, set, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyD2TXeLiFDCw6hlqKcrkNTo_VCaWqXcKi4",
@@ -321,8 +328,8 @@
       portions: document.getElementById('fPortions').value,
       emoji: document.getElementById('fEmoji').value,
       tips: document.getElementById('fTips').value,
-      photo: currentPhotoData,
-      fav: false,
+      photo: currentPhotoData || null,
+      fav: recipes.find(r => r.id === editingId)?.fav || false,
       ingredients: Array.from(document.querySelectorAll('.ing-row')).map(row => ({
         qty: row.querySelector('.ing-qty-input').value,
         name: row.querySelector('.ing-name-input').value
@@ -344,6 +351,20 @@
     }
   };
 
+  // NUEVA FUNCIÓN ELIMINAR
+  window.deleteRecipe = async () => {
+    if (!editingId) return;
+    if (confirm("¿Seguro que quieres eliminar esta receta para siempre?")) {
+      try {
+        await remove(ref(db, `recipes/${editingId}`));
+        showToast("Receta eliminada 🗑️");
+        closeFormModal();
+      } catch (e) {
+        alert("Error al eliminar: " + e.message);
+      }
+    }
+  };
+
   window.toggleFav = (e, id) => {
     e.stopPropagation();
     const r = recipes.find(rec => rec.id === id);
@@ -359,7 +380,11 @@
     document.getElementById('ingList').innerHTML = '';
     document.getElementById('stepList').innerHTML = '';
     
+    // Mostramos u ocultamos el botón de borrar
+    const btnDel = document.getElementById('btnDelete');
+    
     if (id) {
+      btnDel.style.display = 'block';
       const r = recipes.find(rec => rec.id === id);
       document.getElementById('formTitle').innerText = "Editar Receta";
       document.getElementById('fTitle').value = r.title;
@@ -374,12 +399,23 @@
         document.getElementById('photoPreview').src = r.photo;
         document.getElementById('photoPreview').classList.add('visible');
         document.getElementById('photoPlaceholder').style.display = 'none';
+      } else {
+        document.getElementById('photoPreview').classList.remove('visible');
+        document.getElementById('photoPlaceholder').style.display = 'block';
       }
-      r.ingredients.forEach(i => addIng(i.qty, i.name));
-      r.steps.forEach(s => addStep(s));
+      r.ingredients?.forEach(i => addIng(i.qty, i.name));
+      r.steps?.forEach(s => addStep(s));
     } else {
+      btnDel.style.display = 'none';
       document.getElementById('formTitle').innerText = "Nueva Receta";
       document.getElementById('fTitle').value = '';
+      document.getElementById('fPrep').value = '';
+      document.getElementById('fCook').value = '';
+      document.getElementById('fPortions').value = '';
+      document.getElementById('fEmoji').value = '';
+      document.getElementById('fTips').value = '';
+      document.getElementById('photoPreview').classList.remove('visible');
+      document.getElementById('photoPlaceholder').style.display = 'block';
       addIng(); addStep();
     }
     document.getElementById('formOverlay').classList.add('open');
@@ -388,8 +424,6 @@
   window.closeFormModal = () => {
     document.getElementById('formOverlay').classList.remove('open');
     currentPhotoData = null;
-    document.getElementById('photoPreview').classList.remove('visible');
-    document.getElementById('photoPlaceholder').style.display = 'block';
   };
 
   window.addIng = (qty = '', name = '') => {
@@ -424,6 +458,14 @@
     reader.readAsDataURL(file);
   };
 
+  window.removePhoto = (e) => {
+    e.stopPropagation();
+    currentPhotoData = null;
+    document.getElementById('photoPreview').classList.remove('visible');
+    document.getElementById('photoPlaceholder').style.display = 'block';
+    document.getElementById('fPhoto').value = "";
+  };
+
   window.openDetail = (id) => {
     currentDetailId = id;
     const r = recipes.find(rec => rec.id === id);
@@ -445,8 +487,8 @@
       </div>
       <hr class="modal-divider">
       <div class="modal-two-col">
-        <div><div class="modal-section-title">Ingredientes</div><ul class="ingredients-list">${r.ingredients.map(i => `<li><span class="ing-qty">${i.qty}</span> ${i.name}</li>`).join('')}</ul></div>
-        <div><div class="modal-section-title">Paso a paso</div><ol class="steps-list">${r.steps.map((s, idx) => `<li><span class="step-num">${idx+1}</span>${s}</li>`).join('')}</ol></div>
+        <div><div class="modal-section-title">Ingredientes</div><ul class="ingredients-list">${r.ingredients ? r.ingredients.map(i => `<li><span class="ing-qty">${i.qty}</span> ${i.name}</li>`).join('') : ''}</ul></div>
+        <div><div class="modal-section-title">Paso a paso</div><ol class="steps-list">${r.steps ? r.steps.map((s, idx) => `<li><span class="step-num">${idx+1}</span>${s}</li>`).join('') : ''}</ol></div>
       </div>
       ${r.tips ? `<div class="tips-box"><p>${r.tips}</p></div>` : ''}
     `;
@@ -475,7 +517,6 @@
     setTimeout(() => t.classList.remove('show'), 3000);
   };
 
-  // Cierres de modal al hacer clic fuera
   window.closeDetail = (e) => { if (e.target.id === 'detailOverlay') closeDetailModal(); };
   window.closeForm = (e) => { if (e.target.id === 'formOverlay') closeFormModal(); };
 
