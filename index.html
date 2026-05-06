@@ -182,6 +182,7 @@
   // Listen for changes in Firebase
   onValue(recipesRef, (snapshot) => {
     const data = snapshot.val();
+    // Las recetas se cargan desde la DB, si la DB está vacía, la lista estará vacía.
     recipes = data ? Object.keys(data).map(key => ({ ...data[key], fbKey: key })) : [];
     renderSidebar();
     renderGrid();
@@ -189,6 +190,7 @@
 
   window.renderSidebar = () => {
     const el = document.getElementById('catList');
+    if(!el) return;
     el.innerHTML = window.CATEGORIES.map(c => {
       const count = c.id === 'todas' ? recipes.length : recipes.filter(r => r.category === c.id).length;
       return `<div class="cat-item ${activeCategory === c.id ? 'active' : ''}" onclick="setCategory('${c.id}', '${c.label}')">
@@ -205,6 +207,7 @@
 
   window.renderGrid = () => {
     const grid = document.getElementById('recipeGrid');
+    if(!grid) return;
     const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
     let list = recipes.filter(r => (activeCategory === 'todas' || r.category === activeCategory) && (!q || r.title.toLowerCase().includes(q)));
     
@@ -223,11 +226,12 @@
   window.toggleFav = (e, fbKey) => {
     e.stopPropagation();
     const r = recipes.find(r => r.fbKey === fbKey);
-    update(ref(db, 'recetas/' + fbKey), { fav: !r.fav });
+    if(r) update(ref(db, 'recetas/' + fbKey), { fav: !r.fav });
   };
 
   window.openDetail = (fbKey) => {
     const r = recipes.find(r => r.fbKey === fbKey);
+    if(!r) return;
     window.currentDetailKey = fbKey;
     document.getElementById('detailContent').innerHTML = `
       <div class="recipe-modal-header">
@@ -291,7 +295,8 @@
     document.getElementById('stepList').appendChild(d);
   };
   function populateCat() {
-    document.getElementById('fCat').innerHTML = window.CATEGORIES.filter(c => c.id !== 'todas').map(c => `<option value="${c.id}">${c.label}</option>`).join('');
+    const el = document.getElementById('fCat');
+    if(el) el.innerHTML = window.CATEGORIES.filter(c => c.id !== 'todas').map(c => `<option value="${c.id}">${c.label}</option>`).join('');
   }
   window.handlePhotoUpload = (e) => {
     const reader = new FileReader();
@@ -300,7 +305,7 @@
       const prev = document.getElementById('photoPreview');
       prev.src = currentPhotoData; prev.classList.add('visible');
     };
-    reader.readAsDataURL(e.target.files[0]);
+    if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
   };
   window.openSearch = () => {
     const s = document.getElementById('searchBarWrap');
