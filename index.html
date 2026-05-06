@@ -3,56 +3,65 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Recetas de Cami</title>
+<title>Recetas de Cami - Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --cream: #f5f0e8;
     --cream-dark: #ede5d4;
-    --cream-darker: #e0d5c0;
     --brown-dark: #2c1f0e;
     --brown-mid: #5c3d1e;
-    --brown-light: #8b6340;
     --olive: #6b7c4a;
     --olive-light: #8a9e60;
-    --olive-pale: #c8d5a8;
     --taupe: #b8a88a;
-    --taupe-light: #d4c9b0;
-    --sand: #c9b89a;
     --red-cherry: #c0392b;
     --paper-texture: repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(139, 99, 64, 0.06) 27px, rgba(139, 99, 64, 0.06) 28px);
   }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background-color: var(--cream-dark); background-image: var(--paper-texture); font-family: 'Lato', sans-serif; color: var(--brown-dark); min-height: 100vh; }
-  header { background-color: var(--cream); border-bottom: 2px solid var(--taupe); padding: 18px 32px 14px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(92,61,30,0.10); position: sticky; top: 0; z-index: 100; }
-  .logo { display: flex; flex-direction: column; line-height: 1; }
-  .logo-main { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--brown-dark); font-weight: 700; }
-  .logo-sub { font-family: 'Lato', sans-serif; font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--olive); margin-top: 1px; }
-  .header-actions { display: flex; gap: 10px; align-items: center; }
-  .btn-primary { background: var(--olive); color: #fff; border: none; padding: 9px 20px; border-radius: 4px; font-family: 'Lato', sans-serif; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; cursor: pointer; transition: background 0.2s; }
-  .btn-ghost { background: transparent; border: 1.5px solid var(--taupe); color: var(--brown-mid); padding: 8px 16px; border-radius: 4px; font-family: 'Lato', sans-serif; font-size: 0.82rem; letter-spacing: 0.06em; cursor: pointer; transition: all 0.2s; }
-  .app-wrapper { display: flex; min-height: calc(100vh - 68px); }
-  .sidebar { width: 220px; flex-shrink: 0; background: var(--cream); border-right: 1.5px solid var(--taupe-light); padding: 28px 0; position: sticky; top: 68px; height: calc(100vh - 68px); overflow-y: auto; }
-  .sidebar-title { font-family: 'Lato', sans-serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--taupe); padding: 0 22px 12px; border-bottom: 1px solid var(--taupe-light); margin-bottom: 8px; }
-  .cat-item { display: flex; align-items: center; gap: 9px; padding: 9px 22px; cursor: pointer; transition: background 0.15s; font-size: 0.88rem; color: var(--brown-mid); font-weight: 400; border-left: 3px solid transparent; }
-  .cat-item.active { background: var(--cream-dark); border-left-color: var(--olive); color: var(--olive); font-weight: 700; }
-  .content { flex: 1; padding: 32px 36px; overflow-y: auto; }
-  .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px; }
-  .recipe-card { background: var(--cream); border: 1px solid var(--taupe-light); border-radius: 3px; cursor: pointer; position: relative; overflow: hidden; box-shadow: 2px 3px 8px rgba(92,61,30,0.07); }
-  .card-img-wrap { width: 100%; height: 155px; background: var(--cream-darker); display: flex; align-items: center; justify-content: center; }
-  .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
-  .card-body { padding: 16px 18px 14px; }
-  .card-title { font-family: 'Dancing Script', cursive; font-size: 1.35rem; color: var(--brown-dark); }
-  .card-heart { position: absolute; bottom: 12px; right: 14px; color: var(--red-cherry); opacity: 0.4; cursor: pointer; }
-  .card-heart.active { opacity: 1; }
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(44,31,14,0.55); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+
+  header { background-color: var(--cream); border-bottom: 2px solid var(--taupe); padding: 18px 32px 14px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+  .logo { display: flex; flex-direction: column; }
+  .logo-main { font-family: 'Dancing Script', cursive; font-size: 2.2rem; font-weight: 700; }
+  .logo-sub { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--olive); }
+
+  .header-actions { display: flex; gap: 12px; align-items: center; }
+  .btn { padding: 9px 18px; border-radius: 4px; border: none; font-weight: 700; cursor: pointer; font-size: 0.8rem; text-transform: uppercase; transition: 0.2s; }
+  .btn-primary { background: var(--olive); color: white; }
+  .btn-ghost { background: transparent; border: 1.5px solid var(--taupe); color: var(--brown-mid); }
+  .btn-danger { background: var(--red-cherry); color: white; display: none; }
+
+  .app-wrapper { display: flex; min-height: calc(100vh - 75px); }
+  .sidebar { width: 220px; background: var(--cream); border-right: 1.5px solid var(--taupe); padding: 25px 0; }
+  .cat-item { padding: 10px 22px; cursor: pointer; display: flex; justify-content: space-between; font-size: 0.9rem; }
+  .cat-item.active { background: var(--cream-dark); color: var(--olive); font-weight: 700; border-left: 4px solid var(--olive); }
+
+  .content { flex: 1; padding: 30px; }
+  .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+
+  /* Cards & Selection */
+  .recipe-card { background: var(--cream); border: 1px solid var(--taupe); border-radius: 5px; position: relative; cursor: pointer; transition: 0.2s; overflow: hidden; }
+  .recipe-card:hover { transform: translateY(-3px); }
+  .recipe-card.selected { border: 3px solid var(--olive); background: #f0f4e8; }
+  
+  .card-img { height: 140px; display: flex; align-items: center; justify-content: center; background: #eee; font-size: 3rem; }
+  .card-body { padding: 15px; }
+  .card-title { font-family: 'Dancing Script', cursive; font-size: 1.4rem; }
+
+  .selection-indicator { position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--taupe); background: white; display: none; }
+  .select-mode .selection-indicator { display: block; }
+  .selected .selection-indicator { background: var(--olive); border-color: var(--olive); }
+
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
   .modal-overlay.open { display: flex; }
-  .form-modal, .recipe-modal { background: var(--cream); border-radius: 4px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; padding: 30px; position: relative; }
-  .form-input, .form-select, .form-textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid var(--taupe-light); border-radius: 4px; }
-  .toast { position: fixed; bottom: 20px; right: 20px; background: #333; color: white; padding: 10px 20px; border-radius: 4px; display: none; }
+  .modal { background: var(--cream); padding: 30px; border-radius: 8px; width: 400px; }
+  input, textarea, select { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid var(--taupe); border-radius: 4px; }
+  
+  .toast { position: fixed; bottom: 20px; right: 20px; background: #333; color: white; padding: 12px 20px; border-radius: 4px; display: none; }
 </style>
 </head>
-<body>
+<body id="mainBody">
 
 <header>
   <div class="logo">
@@ -60,43 +69,37 @@
     <span class="logo-main">Recetas de Cami</span>
   </div>
   <div class="header-actions">
-    <button class="btn-primary" onclick="openFormModal()">+ Nueva Receta</button>
+    <button class="btn btn-ghost" id="btnMode" onclick="toggleSelectMode()">Seleccionar</button>
+    <button class="btn btn-danger" id="btnDelete" onclick="deleteSelected()">Eliminar (<span id="count">0</span>)</button>
+    <button class="btn btn-primary" id="btnAdd" onclick="openModal()">+ Nueva</button>
   </div>
 </header>
 
 <div class="app-wrapper">
-  <aside class="sidebar">
-    <div class="sidebar-title">Categorías</div>
-    <div id="catList"></div>
-  </aside>
+  <aside class="sidebar" id="catList"></aside>
   <main class="content">
     <div id="recipeGrid" class="recipe-grid"></div>
   </main>
 </div>
 
-<!-- FORM MODAL -->
-<div class="modal-overlay" id="formOverlay">
-  <div class="form-modal">
-    <h2 id="formTitle">Nueva Receta</h2><br>
-    <input type="text" id="fTitle" class="form-input" placeholder="Nombre de la receta">
-    <select id="fCat" class="form-select"></select>
-    <input type="text" id="fEmoji" class="form-input" placeholder="Emoji (ej: 🍕)">
-    <textarea id="fTips" class="form-textarea" placeholder="Tips o notas"></textarea>
-    <div class="form-actions">
-      <button class="btn-ghost" onclick="closeFormModal()">Cancelar</button>
-      <button class="btn-primary" onclick="saveRecipe()">Guardar en la Nube</button>
-    </div>
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3>Nueva Receta</h3><br>
+    <input type="text" id="t" placeholder="Título">
+    <select id="c"></select>
+    <input type="text" id="e" placeholder="Emoji (🍕)">
+    <textarea id="n" placeholder="Notas"></textarea>
+    <button class="btn btn-primary" onclick="save()">Guardar</button>
+    <button class="btn btn-ghost" onclick="closeModal()">Cerrar</button>
   </div>
 </div>
 
 <div id="toast" class="toast"></div>
 
-<!-- FIREBASE SDKS (COMPAT VERSION) -->
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
 
 <script>
-// --- CONFIGURACIÓN ---
 const firebaseConfig = {
   apiKey: "AIzaSyD2TXeLiFDCw6hlqKcrkNTo_VCaWqXcKi4",
   authDomain: "recetas-de-cami-b74fd.firebaseapp.com",
@@ -104,107 +107,97 @@ const firebaseConfig = {
   projectId: "recetas-de-cami-b74fd",
   storageBucket: "recetas-de-cami-b74fd.firebasestorage.app",
   messagingSenderId: "664990770751",
-  appId: "1:664990770751:web:466aa84c88d7cb4285ba8a",
-  measurementId: "G-W3VH1857D3"
+  appId: "1:664990770751:web:466aa84c88d7cb4285ba8a"
 };
 
-// Inicializar
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-const CATEGORIES = [
-  { id: 'todas', label: 'Todas', icon: '📖' },
-  { id: 'entradas', label: 'Entradas', icon: '🥗' },
-  { id: 'principales', label: 'Principales', icon: '🍽' },
-  { id: 'postres', label: 'Postres', icon: '🍰' },
-  { id: 'otros', label: 'Otros', icon: '✨' }
+const CATS = [
+  {id:'todas', n:'Todas', i:'📖'},
+  {id:'entradas', n:'Entradas', i:'🥗'},
+  {id:'principales', n:'Principales', i:'🍽'},
+  {id:'postres', n:'Postres', i:'🍰'}
 ];
 
-let recipes = [];
-let activeCategory = 'todas';
+let recipes = [], activeCat = 'todas', isSelectMode = false, selected = new Set();
 
-// --- SINCRONIZACIÓN EN TIEMPO REAL ---
-db.ref('recipes').on('value', (snapshot) => {
-  const data = snapshot.val();
-  // Convertimos el objeto de Firebase en un Array
-  recipes = data ? Object.keys(data).map(key => ({...data[key], fbKey: key})) : [];
-  renderSidebar();
-  renderGrid();
+db.ref('recipes').on('value', s => {
+  const d = s.val();
+  recipes = d ? Object.keys(d).map(k => ({...d[k], id: k})) : [];
+  render();
 });
 
-function renderSidebar() {
-  const el = document.getElementById('catList');
-  el.innerHTML = CATEGORIES.map(c => {
-    const count = c.id === 'todas' ? recipes.length : recipes.filter(r => r.category === c.id).length;
-    return `<div class="cat-item ${activeCategory === c.id ? 'active' : ''}" onclick="setCategory('${c.id}')">
-      <span>${c.icon} ${c.label}</span>
-      <span style="margin-left:auto">${count}</span>
-    </div>`;
-  }).join('');
+function toggleSelectMode() {
+  isSelectMode = !isSelectMode;
+  selected.clear();
+  document.getElementById('mainBody').classList.toggle('select-mode', isSelectMode);
+  document.getElementById('btnMode').textContent = isSelectMode ? "Cancelar" : "Seleccionar";
+  document.getElementById('btnDelete').style.display = isSelectMode ? "block" : "none";
+  document.getElementById('btnAdd').style.display = isSelectMode ? "none" : "block";
+  updateCount();
+  render();
 }
 
-function setCategory(id) {
-  activeCategory = id;
-  renderSidebar();
-  renderGrid();
+function handleCard(id) {
+  if(!isSelectMode) return;
+  selected.has(id) ? selected.delete(id) : selected.add(id);
+  updateCount();
+  render();
 }
 
-function renderGrid() {
+function updateCount() { document.getElementById('count').textContent = selected.size; }
+
+function deleteSelected() {
+  if(selected.size === 0) return;
+  if(confirm(`¿Eliminar ${selected.size} recetas permanentemente?`)) {
+    selected.forEach(id => db.ref('recipes/'+id).remove());
+    toggleSelectMode();
+    showToast("Recetas eliminadas");
+  }
+}
+
+function render() {
   const grid = document.getElementById('recipeGrid');
-  const filtered = recipes.filter(r => activeCategory === 'todas' || r.category === activeCategory);
+  const filtered = recipes.filter(r => activeCat === 'todas' || r.category === activeCat);
   
   grid.innerHTML = filtered.map(r => `
-    <div class="recipe-card">
-      <div class="card-img-wrap"><span style="font-size:3rem">${r.emoji || '🥘'}</span></div>
-      <div class="card-body">
-        <div class="card-title">${r.title}</div>
-      </div>
-      <span class="card-heart ${r.fav ? 'active' : ''}" onclick="toggleFav('${r.fbKey}', ${r.fav})">♥</span>
+    <div class="recipe-card ${selected.has(r.id) ? 'selected' : ''}" onclick="handleCard('${r.id}')">
+      <div class="selection-indicator"></div>
+      <div class="card-img">${r.emoji || '🥘'}</div>
+      <div class="card-body"><div class="card-title">${r.title}</div></div>
     </div>
-  `).join('') + `<div class="add-card" style="border:2px dashed #ccc; display:flex; align-items:center; justify-content:center; cursor:pointer; min-height:150px" onclick="openFormModal()">+</div>`;
+  `).join('');
+
+  document.getElementById('catList').innerHTML = CATS.map(c => `
+    <div class="cat-item ${activeCat === c.id ? 'active' : ''}" onclick="activeCat='${c.id}';render()">
+      <span>${c.i} ${c.n}</span>
+      <span>${c.id==='todas' ? recipes.length : recipes.filter(r=>r.category===c.id).length}</span>
+    </div>
+  `).join('');
 }
 
-function toggleFav(key, currentStatus) {
-  db.ref('recipes/' + key).update({ fav: !currentStatus });
+function openModal() {
+  document.getElementById('c').innerHTML = CATS.filter(c=>c.id!=='todas').map(c=>`<option value="${c.id}">${c.n}</option>`).join('');
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+function save() {
+  const title = document.getElementById('t').value;
+  if(!title) return;
+  db.ref('recipes').push({
+    title, 
+    category: document.getElementById('c').value,
+    emoji: document.getElementById('e').value,
+    notes: document.getElementById('n').value
+  }).then(() => { closeModal(); showToast("¡Guardado!"); });
 }
 
-function openFormModal() {
-  document.getElementById('fCat').innerHTML = CATEGORIES.filter(c => c.id !== 'todas').map(c => `<option value="${c.id}">${c.label}</option>`).join('');
-  document.getElementById('formOverlay').classList.add('open');
-}
-
-function closeFormModal() {
-  document.getElementById('formOverlay').classList.remove('open');
-}
-
-function saveRecipe() {
-  const title = document.getElementById('fTitle').value;
-  const category = document.getElementById('fCat').value;
-  const emoji = document.getElementById('fEmoji').value;
-  const tips = document.getElementById('fTips').value;
-
-  if(!title) return alert("Ponle un nombre");
-
-  const newRecipe = {
-    title,
-    category,
-    emoji,
-    tips,
-    fav: false,
-    date: Date.now()
-  };
-
-  db.ref('recipes').push(newRecipe).then(() => {
-    closeFormModal();
-    showToast("¡Receta guardada!");
-  });
-}
-
-function showToast(msg) {
+function showToast(m) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.display = 'block';
-  setTimeout(() => t.style.display = 'none', 3000);
+  t.textContent = m; t.style.display = 'block';
+  setTimeout(() => t.style.display='none', 2000);
 }
 </script>
 </body>
