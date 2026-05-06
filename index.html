@@ -116,11 +116,13 @@
   .modal-inner { padding: 36px 36px 40px 56px; }
   .modal-close { position: absolute; top: 14px; right: 18px; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--taupe); z-index: 5; transition: color 0.2s; }
   .modal-close:hover { color: var(--brown-dark); }
-  .modal-edit-btn { position: absolute; top: 14px; right: 52px; background: none; border: 1px solid var(--taupe-light); padding: 5px 12px; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--olive); cursor: pointer; border-radius: 3px; z-index: 5; transition: all 0.2s; }
-  .modal-edit-btn:hover { background: var(--olive); color: #fff; border-color: var(--olive); }
-  /* Estilo para el botón de eliminar */
-  .modal-delete-btn { position: absolute; top: 14px; right: 110px; background: none; border: 1px solid var(--taupe-light); padding: 5px 12px; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red-cherry); cursor: pointer; border-radius: 3px; z-index: 5; transition: all 0.2s; }
-  .modal-delete-btn:hover { background: var(--red-cherry); color: #fff; border-color: var(--red-cherry); }
+  .modal-actions-top { position: absolute; top: 14px; right: 52px; display: flex; gap: 8px; z-index: 10; }
+  
+  .btn-action-small { background: none; border: 1px solid var(--taupe-light); padding: 5px 12px; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border-radius: 3px; transition: all 0.2s; }
+  .btn-edit-small { color: var(--olive); }
+  .btn-edit-small:hover { background: var(--olive); color: #fff; border-color: var(--olive); }
+  .btn-delete-small { color: var(--red-cherry); }
+  .btn-delete-small:hover { background: var(--red-cherry); color: #fff; border-color: var(--red-cherry); }
 
   .recipe-modal-header { display: flex; gap: 28px; margin-bottom: 30px; align-items: flex-start; }
 
@@ -253,6 +255,7 @@
     .recipe-modal-header { flex-direction: column; }
     .form-row { grid-template-columns: 1fr 1fr; }
     .content { padding: 20px 16px; }
+    .modal-actions-top { position: relative; top: 0; right: 0; margin-bottom: 10px; justify-content: flex-end; }
   }
 </style>
 </head>
@@ -294,9 +297,10 @@
   <div class="recipe-modal" id="detailModal">
     <div class="notebook-holes" id="notebookHoles"></div>
     <button class="modal-close" onclick="closeDetailModal()">✕</button>
-    <!-- Botón de Eliminar añadido -->
-    <button class="modal-delete-btn" onclick="deleteCurrentRecipe()">Eliminar</button>
-    <button class="modal-edit-btn" onclick="editCurrentRecipe()">Editar</button>
+    <div class="modal-actions-top">
+        <button class="btn-action-small btn-delete-small" onclick="deleteRecipe()">Borrar</button>
+        <button class="btn-action-small btn-edit-small" onclick="editCurrentRecipe()">Editar</button>
+    </div>
     <div class="modal-inner" id="detailContent"></div>
   </div>
 </div>
@@ -421,14 +425,12 @@ function save() {
 onValue(recipesRef, (snapshot) => {
   const data = snapshot.val();
   if (data) {
-    recipes = data;
-    renderSidebar();
-    renderGrid();
+    recipes = Array.isArray(data) ? data : Object.values(data);
   } else {
     recipes = [];
-    renderSidebar();
-    renderGrid();
   }
+  renderSidebar();
+  renderGrid();
 });
 
 function renderSidebar() {
@@ -531,17 +533,6 @@ function openDetail(id) {
   document.getElementById('detailOverlay').classList.add('open');
 }
 
-// Nueva función para eliminar la receta actual
-function deleteCurrentRecipe() {
-  if (!currentDetailId) return;
-  if (confirm("¿Estás segura de que querés eliminar esta receta? No se puede deshacer. 🥺")) {
-    recipes = recipes.filter(r => r.id !== currentDetailId);
-    save();
-    closeDetailModal();
-    showToast('🗑️ Receta eliminada');
-  }
-}
-
 function saveRecipe() {
   const title = document.getElementById('fTitle').value.trim();
   const cat = document.getElementById('fCat').value;
@@ -549,8 +540,8 @@ function saveRecipe() {
 
   const ings = [];
   document.querySelectorAll('#ingList .ing-row').forEach(row => {
-    const qty = row.querySelector('[data-ing-qty]')?.value.trim() || '';
-    const name = row.querySelector('[data-ing-name]')?.value.trim() || '';
+    const qty = row.querySelector('input[placeholder="Cant."]')?.value.trim() || '';
+    const name = row.querySelector('input[placeholder="Ingrediente"]')?.value.trim() || '';
     if (name) ings.push({ qty, name });
   });
 
@@ -561,6 +552,7 @@ function saveRecipe() {
   });
 
   const data = {
+    id: editingId || Date.now(),
     title,
     category: cat,
     prep: document.getElementById('fPrep').value.trim(),
@@ -576,12 +568,10 @@ function saveRecipe() {
 
   if (editingId) {
     const idx = recipes.findIndex(r => r.id === editingId);
-    data.id = editingId;
     data.fav = recipes[idx].fav;
     recipes[idx] = data;
     showToast('✏️ Receta actualizada');
   } else {
-    data.id = Date.now();
     recipes.unshift(data);
     showToast('✨ Receta guardada');
   }
@@ -605,14 +595,13 @@ function handlePhotoUpload(event) {
   reader.readAsDataURL(file);
 }
 
-// FUNCIONES AUXILIARES PARA EL FORM
 function addIng(val = { qty: '', name: '' }) {
   ingCount++;
   const div = document.createElement('div');
   div.className = 'ing-row';
   div.innerHTML = `
-    <input type="text" class="form-input" style="max-width:100px" placeholder="Cant." value="${val.qty}" data-ing-qty="${ingCount}">
-    <input type="text" class="form-input" placeholder="Ingrediente" value="${val.name}" data-ing-name="${ingCount}">
+    <input type="text" class="form-input" style="max-width:100px" placeholder="Cant." value="${val.qty}">
+    <input type="text" class="form-input" placeholder="Ingrediente" value="${val.name}">
     <button class="remove-btn" onclick="this.parentElement.remove()">✕</button>
   `;
   document.getElementById('ingList').appendChild(div);
@@ -624,7 +613,7 @@ function addStep(val = '') {
   div.className = 'step-row';
   div.innerHTML = `
     <span class="step-num-badge">${stepCount}</span>
-    <input type="text" class="form-input" placeholder="Paso..." value="${val}" data-step="${stepCount}">
+    <input type="text" class="form-input" placeholder="Paso..." value="${val}">
     <button class="remove-btn" onclick="this.parentElement.remove()">✕</button>
   `;
   document.getElementById('stepList').appendChild(div);
@@ -633,6 +622,9 @@ function addStep(val = '') {
 function openFormModal(id = null) {
   editingId = id;
   currentPhotoData = null;
+  ingCount = 0; // REINICIO DE CONTADORES
+  stepCount = 0;
+  
   const sel = document.getElementById('fCat');
   sel.innerHTML = CATEGORIES.filter(c => c.id !== 'todas').map(c => `<option value="${c.id}">${c.icon} ${c.label}</option>`).join('');
   document.getElementById('ingList').innerHTML = '';
@@ -646,6 +638,7 @@ function openFormModal(id = null) {
 
   if (id) {
     const r = recipes.find(r => r.id === id);
+    if (!r) return;
     document.getElementById('formTitle').textContent = 'Editar Receta';
     document.getElementById('fTitle').value = r.title;
     document.getElementById('fCat').value = r.category;
@@ -661,8 +654,8 @@ function openFormModal(id = null) {
       document.getElementById('photoPlaceholder').style.display = 'none';
       document.getElementById('photoRemoveBtn').classList.add('visible');
     }
-    r.ingredients.forEach(i => addIng(i));
-    r.steps.forEach(s => addStep(s));
+    if (r.ingredients) r.ingredients.forEach(i => addIng(i));
+    if (r.steps) r.steps.forEach(s => addStep(s));
   } else {
     document.getElementById('formTitle').textContent = 'Nueva Receta';
     document.getElementById('fTitle').value = '';
@@ -671,13 +664,23 @@ function openFormModal(id = null) {
   document.getElementById('formOverlay').classList.add('open');
 }
 
+function deleteRecipe() {
+    if (!currentDetailId) return;
+    if (confirm("¿Estás segura de eliminar esta receta? No se puede recuperar.")) {
+        recipes = recipes.filter(r => r.id !== currentDetailId);
+        save();
+        closeDetailModal();
+        showToast('🗑️ Receta eliminada');
+    }
+}
+
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2600);
 }
 
-// EXPORTAR AL OBJETO WINDOW PARA QUE FUNCIONEN LOS ONCLICK
+// EXPORTAR AL OBJETO WINDOW
 window.setCategory = setCategory;
 window.openDetail = openDetail;
 window.toggleFav = toggleFav;
@@ -686,7 +689,7 @@ window.saveRecipe = saveRecipe;
 window.handlePhotoUpload = handlePhotoUpload;
 window.addIng = addIng;
 window.addStep = addStep;
-window.deleteCurrentRecipe = deleteCurrentRecipe; // Exportar nueva función
+window.deleteRecipe = deleteRecipe;
 window.openSearch = () => {
   const wrap = document.getElementById('searchBarWrap');
   wrap.style.display = wrap.style.display === 'none' ? 'flex' : 'none';
